@@ -453,7 +453,6 @@ abstract class AbstractDriverManager {
 
     /**
      * @return bool True if code coverage is enabled.
-     * 
      */
     abstract protected function isCoverageEnabled(): bool;
 
@@ -463,7 +462,6 @@ abstract class AbstractDriverManager {
      * '&testName=nameOfCurrentTest'
      *
      * @return string The key that will be used when defining test names
-     * 
      */
     abstract protected function getCoverageHintingKey(): string;
 

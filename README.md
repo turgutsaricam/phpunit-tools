@@ -79,6 +79,46 @@ After running this, the specified reports will be generated and saved into the s
 
 To learn what parameters are provided in the constructor methods, simply refer to phpDoc.
 
+# PHPUnit Package
+Contains the tools directly related to PHPUnit.
+
+## Redirect
+This class is responsible for redirecting a command that runs `phpunit` to correct PHPUnit runnable and modifying the command such that it contains the correct `phpunit.xml` file. This is done considering a case that there are unit and UI tests.
+
+Consider the following case. There are two different tests, namely regular plugin tests and user interface tests. These tests require different versions of PHPUnit and different PHPUnit configurations. Selenium WebDriver supports PHPUnit 5.x, while WordPress supports PHPUnit 7.x. PHPStorm does not have an option to define different PHPUnit executables for different test directories. Yet, we want to use different PHPUnit versions.
+
+This class looks for the path of the test files and redirects the command to the correct PHPUnit version by injecting the correct configuration file path. In short, this is just a wrapper that redirects PHPUnit commands to the correct PHPUnit executables.
+
+### How to use this class
+
+- Create a file named as `phpunit`
+- Make sure this file's first line is `#!/usr/bin/env php`
+- Make sure this file's *absolute* path is entered as the value of `Preferences > Languages & Frameworks > PHP > Test Frameworks > (select or create a test framework) > Path to phpunit.phar`.
+- Make sure the value of `Preferences > Languages & Frameworks > PHP > Test Frameworks > (previously set framework) >
+  Default configuration file` is the same as the value of `$configPathDefault` (i.e. absolute path of
+  *`$relativeDefaultConfigXmlPath`*)
+- Create an instance of this class in the created file and call `redirect()` method
+
+After these are correctly set, you can use PHPStorm's buttons (run, debug, run with coverage) to run the tests.
+
+An example `phpunit` file might be the following:
+```php
+$redirect = new Redirect(
+    __DIR__ . "/../",
+    'tests/tests-app',
+    'tests/tests-app/phpunit.xml.dist',
+    'app/vendor/phpunit/phpunit/phpunit',
+    'tests/tests-ui',
+    'tests/tests-ui/phpunit.xml.dist',
+    'tests/tests-ui/vendor/phpunit/phpunit/phpunit',
+    'UI_TEST_COVERAGE_ENABLED'
+);
+
+$redirect->redirect();
+```
+
+Simply refer to the phpDoc to learn what are the parameters.
+
 # WebDriver Package
 This package requires [`facebook/webdriver`](https://github.com/facebook/php-webdriver). Basically, this should be used for Selenium tests. This package provides an `AbstractDriverManager` that handles loading different URLs in different tabs, switching to a tab if a URL is already loaded in a tab, adding a parameter for each URL to hint code coverage (the same hint explained in `CoverageHandler`), modifying `window.ajaxurl` JavaScript variable (which is the default variable for WordPress sites) to enable code coverage for AJAX requests, closing excessive browser tabs, setting up the driver and logging into the site-under-test, and other things like refreshing, closing, opening tabs.
 
