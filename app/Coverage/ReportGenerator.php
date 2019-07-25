@@ -79,7 +79,7 @@ class ReportGenerator {
      * @param string $reportsDirectoryPath   See {@link $reportsDirectoryPath}
      * @param string $coverageDumpDirPath    See {@link $coverageDumpDirPath}
      * @param string $timeZone               See {@link $timeZone}
-     * @since 1.8.1
+     * 
      */
     public function __construct($generateHtml, $generateClover, $whitelistPaths, $excludedWhitelistPaths,
                                 $id, $reportsDirectoryPath, $coverageDumpDirPath, $timeZone = '') {
@@ -102,7 +102,6 @@ class ReportGenerator {
      * Generates the specified reports from the coverage dumps.
      *
      * @throws ReflectionException
-     * @since 1.8.1
      */
     public function generate() {
         // Prepare the fina coverage
@@ -122,7 +121,6 @@ class ReportGenerator {
      * Generates Clover report from {@link $finalCoverage}
      *
      * @param string $dateStr The date that will be appended to the name of the report
-     * @since 1.8.1
      */
     private function generateClover($dateStr) {
         $this->inform("Generating final report in Clover ({$dateStr})...");
@@ -137,7 +135,6 @@ class ReportGenerator {
      * Generates HTML report from {@link $finalCoverage}
      *
      * @param string $dateStr The date that will be used as the directory name for the report
-     * @since 1.8.1
      */
     private function generateHtmlReport($dateStr) {
         $this->inform("Generating final report in HTML ({$dateStr})...");
@@ -152,7 +149,6 @@ class ReportGenerator {
      * Prepares the final coverage by appending the dumped coverage files.
      *
      * @throws ReflectionException
-     * @since 1.8.1
      */
     private function prepareFinalCoverage() {
         if ($this->isPrepared) return;
@@ -202,8 +198,6 @@ class ReportGenerator {
 
     /**
      * Initializes {@link $finalCoverage}
-     *
-     * @since 1.8.1
      */
     private function initFinalCoverage() {
         if ($this->isInitialized) return;
@@ -230,7 +224,6 @@ class ReportGenerator {
 
     /**
      * @return array Absolute paths of all the supported coverage dump files
-     * @since 1.8.1
      */
     private function getCoverageFilePaths() {
         $allExtensions = [
@@ -249,7 +242,6 @@ class ReportGenerator {
     /**
      * @param string $ext Extension of the needed coverage files.
      * @return array Absolute paths of the coverage dump files having the specified extension
-     * @since 1.8.1
      */
     private function getCoverFilePathsWithExt($ext) {
         return glob($this->coverageDumpDirPath . "/*.{$ext}") ?: [];
@@ -257,7 +249,6 @@ class ReportGenerator {
 
     /**
      * @return string Current date as a string in a format that will be used in file names.
-     * @since 1.8.1
      */
     private function getCurrentDateString() {
         return $this->getCurrentDateStringWithFormat('Y-m-d_H.i.s');
@@ -269,7 +260,6 @@ class ReportGenerator {
      * @param string $text
      * @param bool   $appendNewLine True if a new line character should be appended.
      * @param bool   $prependDate True if current date should be prepended.
-     * @since 1.8.1
      */
     private function inform($text, $appendNewLine = true, $prependDate = true) {
         $msg = $text . ($appendNewLine ? "\n" : "");
@@ -285,7 +275,6 @@ class ReportGenerator {
     /**
      * @param string $format See {@link DateTime::format()}
      * @return string Current date with the given format.
-     * @since 1.8.1
      */
     private function getCurrentDateStringWithFormat($format) {
         $dateTime = new DateTime('now', new DateTimeZone($this->timeZone));

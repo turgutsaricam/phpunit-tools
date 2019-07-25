@@ -41,7 +41,7 @@ new CoverageHandler(
 );
 ```
 
-_Based on [https://tarunlalwani.com/post/php-code-coverage-web-selenium/]() Visit this page for more information._
+_Based on <https://tarunlalwani.com/post/php-code-coverage-web-selenium/> Visit this page for more information._
 
 ## ReportGenerator
 This class generates HTML and Clover reports from the coverage data dumped by `CoverageHandler`. To use this, create a file named as `generate-report.php` that creates an instance of `ReportGenerator` and calls `generate()` method.

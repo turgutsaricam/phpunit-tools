@@ -49,8 +49,6 @@ abstract class AbstractSetupStrategy {
 
     /**
      * Sets the driver up and logs into the WP admin.
-     *
-     * @since 1.8.1
      */
     public function setUpDriverAndLogin() {
         // If the driver is already set-up, no need to do it again.
@@ -76,7 +74,6 @@ abstract class AbstractSetupStrategy {
 
     /**
      * @return string Host URL to connect to Selenium
-     * @since 1.8.1
      */
     protected function getSeleniumHostUrl(): string {
         return $this->seleniumHostUrl;
@@ -84,7 +81,6 @@ abstract class AbstractSetupStrategy {
 
     /**
      * @return string The URL that will be loaded in the browser initially.
-     * @since 1.8.1
      */
     protected function getInitialUrl(): string {
         return $this->initialUrl;

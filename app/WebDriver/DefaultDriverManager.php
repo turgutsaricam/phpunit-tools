@@ -34,7 +34,6 @@ class DefaultDriverManager extends AbstractDriverManager {
 
     /**
      * @return bool True if code coverage is enabled.
-     * @since 1.8.1
      */
     protected function isCoverageEnabled(): bool {
         return $this->coverageEnabled;
@@ -46,7 +45,6 @@ class DefaultDriverManager extends AbstractDriverManager {
      * '&testName=nameOfCurrentTest'
      *
      * @return string The key that will be used when defining test names
-     * @since 1.8.1
      */
     protected function getCoverageHintingKey(): string {
         return $this->coverageHintingKey;

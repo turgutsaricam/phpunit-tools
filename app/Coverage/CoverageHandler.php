@@ -25,8 +25,6 @@ use SebastianBergmann\CodeCoverage\Report\PHP;
  *        "/var/www/html/wp-content/plugins/wp-content-crawler/tests/tests-ui/coverage/start-coverage.php"
  *
  * Based on https://tarunlalwani.com/post/php-code-coverage-web-selenium/ Visit this page for more information.
- *
- * @since 1.8.1
  */
 class CoverageHandler {
 
@@ -86,7 +84,7 @@ class CoverageHandler {
      * @param array  $whitelistPaths         See {@link $whitelistPaths}
      * @param array  $excludedWhitelistPaths See {@link $excludedWhitelistPaths}
      * @param string $coverageDumpDirPath    See {@link $coverageDumpDirPath}
-     * @since 1.8.1
+     * 
      */
     public function __construct($coverageType, $testNameKey, $whitelistPaths, $excludedWhitelistPaths, $coverageDumpDirPath) {
         $this->coverageType         = $coverageType;
@@ -112,7 +110,7 @@ class CoverageHandler {
     }
 
     /**
-     * @since 1.8.1
+     * 
      */
     public function __destruct() {
         try {
@@ -130,8 +128,6 @@ class CoverageHandler {
 
     /**
      * Starts collecting coverage data if {@link $coverageEnabled} is true.
-     *
-     * @since 1.8.1
      */
     private function maybeStartCoverage() {
         if (!$this->coverageEnabled) return;
@@ -163,8 +159,6 @@ class CoverageHandler {
 
     /**
      * Collects coverage data and dumps it if {@link $coverageEnabled} is true.
-     *
-     * @since 1.8.1
      */
     private function maybeEndCoverage() {
         if (!$this->coverageEnabled) return;
@@ -200,7 +194,6 @@ class CoverageHandler {
     /**
      * @param string $extension See {@link getCoverageFilePath()}
      * @param mixed  $data      Data to be written into the coverage file
-     * @since 1.8.1
      */
     private function dumpCoverage(string $extension, $data) {
         // Get the dump file path
@@ -216,7 +209,6 @@ class CoverageHandler {
     /**
      * @param string $extension Extension of the coverage file, e.g. "json"
      * @return string Full path of the coverage file
-     * @since 1.8.1
      */
     private function getCoverageFilePath(string $extension): string {
         $time = microtime(true);
@@ -226,8 +218,6 @@ class CoverageHandler {
     /**
      * Initializes {@link $testName}. This method searches for the test name in {@link $_GET}, {@link $_POST}, and
      * {@link $_COOKIE}, respectively. See {@link getTestName()} for more information.
-     *
-     * @since 1.8.1
      */
     private function initTestName() {
         $dataItems = [$_GET, $_POST, $_COOKIE];
@@ -246,7 +236,6 @@ class CoverageHandler {
      *
      * @param array $data The data in which the test name will be searched for.
      * @return string|null If there is a test name in the data, the test name as a string. Otherwise, null.
-     * @since 1.8.1
      */
     private function getTestName(array $data) {
         $key = $this->testNameKey;

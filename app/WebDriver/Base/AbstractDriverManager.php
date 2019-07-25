@@ -4,8 +4,6 @@
  * User: turgutsaricam
  * Date: 25.07.2019
  * Time: 13:01
- *
- * @since 1.8.1
  */
 
 namespace TurgutSaricam\PHPUnitTools\WebDriver\Base;
@@ -39,7 +37,7 @@ abstract class AbstractDriverManager {
     /**
      * @param AbstractSetupStrategy $setupStrategy
      * @param int                   $maxTabCount See {@link $maxTabCount}
-     * @since 1.8.1
+     * 
      */
     protected function __construct($setupStrategy, int $maxTabCount = 8) {
         $this->setupStrategy    = $setupStrategy;
@@ -69,7 +67,6 @@ abstract class AbstractDriverManager {
      * @return $this
      * @throws NoSuchElementException
      * @throws TimeOutException
-     * @since 1.8.1
      */
     public function waitUntilPresenceOfElement($cssSelector) {
         $this->getDriver()->wait(10)->until(
@@ -81,7 +78,6 @@ abstract class AbstractDriverManager {
 
     /**
      * @return RemoteWebDriver
-     * @since 1.8.1
      */
     public function getDriver(): RemoteWebDriver {
         return $this->driver;
@@ -92,7 +88,6 @@ abstract class AbstractDriverManager {
      * this method just switches to that tab.
      *
      * @param string $url The URL that will be opened in the browser.
-     * @since 1.8.1
      */
     public function get(string $url) {
         $url = $this->maybeCreateCoverageEnabledUrl($url);
@@ -121,7 +116,6 @@ abstract class AbstractDriverManager {
      * loaded in a new tab. This method must be used instead of directly calling the driver's get method.
      *
      * @param string $url
-     * @since 1.8.1
      */
     public function getNonManaged(string $url) {
         $this->getDriver()->get($this->maybeCreateCoverageEnabledUrl($url));
@@ -134,7 +128,6 @@ abstract class AbstractDriverManager {
      * @param callable $callback A callback that performs the actions that should be done in a new tab. Returns nothing.
      *                           E.g. <b><i>function() { }</i></b>
      * @return $this
-     * @since 1.8.1
      */
     public function doInNewTab(callable $callback) {
         // Get the current window's handle and store it since we need it to activate the current window again
@@ -160,7 +153,6 @@ abstract class AbstractDriverManager {
      * Closes the currently active tab/window.
      *
      * @return $this
-     * @since 1.8.1
      */
     public function closeCurrentTab() {
         // Find the active tab and close it
@@ -180,7 +172,6 @@ abstract class AbstractDriverManager {
      * Refreshes the current tab.
      *
      * @return $this
-     * @since 1.8.1
      */
     public function refreshCurrentTab() {
         $this->getDriver()->navigate()->refresh();
@@ -192,7 +183,6 @@ abstract class AbstractDriverManager {
      * Refresh all open tabs.
      *
      * @return $this
-     * @since 1.8.1
      */
     public function refreshAllTabs() {
         foreach($this->tabs as $tab) {
@@ -207,7 +197,6 @@ abstract class AbstractDriverManager {
      * Get the tab created latest.
      *
      * @return DriverTab
-     * @since 1.8.1
      */
     public function getLastTab() {
         $tabCount = $this->getTabCount();
@@ -220,7 +209,6 @@ abstract class AbstractDriverManager {
      * Closes all tabs, and hence, the browser.
      *
      * @throws \Exception See {@link closeTab()}
-     * @since 1.8.1
      */
     public function closeBrowser() {
         // Quit
@@ -235,7 +223,6 @@ abstract class AbstractDriverManager {
      *
      * @param string $url Original URL
      * @return string Test URL
-     * @since 1.8.1
      */
     public function maybeCreateCoverageEnabledUrl(string $url) {
         // If coverage is not enabled, return the given URL.
@@ -272,8 +259,6 @@ abstract class AbstractDriverManager {
 
     /**
      * Sets the driver up and logs into the WP admin.
-     *
-     * @since 1.8.1
      */
     protected function setUpDriverAndLogin() {
         $this->setupStrategy
@@ -286,7 +271,6 @@ abstract class AbstractDriverManager {
      * true. Also, adds the current window as a tab.
      *
      * @param RemoteWebDriver $driver
-     * @since 1.8.1
      */
     public function setDriverAsInitialized($driver) {
         $this->isSetup = true;
@@ -301,7 +285,6 @@ abstract class AbstractDriverManager {
      *
      * @return DriverTab Newly added {@link DriverTab}
      * @throws \Exception If the current window is already among the registered tabs.
-     * @since 1.8.1
      */
     protected function addCurrentWindowAsTab() {
         $handle = $this->getDriver()->getWindowHandle();
@@ -322,8 +305,6 @@ abstract class AbstractDriverManager {
 
     /**
      * Close the tabs if the number of open tabs is greater than {@link maxTabCount}.
-     *
-     * @since 1.8.1
      */
     protected function closeExcessiveTabs() {
         // If there are not at least two tabs, stop. Since we do not want to close the browser.
@@ -345,7 +326,6 @@ abstract class AbstractDriverManager {
     /**
      * @param DriverTab $tab
      * @throws \Exception If a tab could not be closed.
-     * @since 1.8.1
      */
     protected function closeTab($tab) {
         // Close it. First, activate. Then, close the last active window.
@@ -375,7 +355,6 @@ abstract class AbstractDriverManager {
      *
      * @param string $handle Tab/window handle
      * @return null|DriverTab
-     * @since 1.8.1
      */
     protected function getTabByHandle(string $handle) {
         foreach($this->tabs as $tab) {
@@ -391,7 +370,6 @@ abstract class AbstractDriverManager {
      * Get the number of tabs
      *
      * @return int
-     * @since 1.8.1
      */
     protected function getTabCount(): int {
         return sizeof($this->tabs);
@@ -401,7 +379,6 @@ abstract class AbstractDriverManager {
      * Get the tab that is accessed the most further in the past.
      *
      * @return null|DriverTab Last accessed tab
-     * @since 1.8.1
      */
     protected function getOldestActiveTab() {
         $minDate = null;
@@ -425,7 +402,6 @@ abstract class AbstractDriverManager {
      * Opens a new browser tab and activates it.
      *
      * @return $this
-     * @since 1.8.1
      */
     protected function openNewTab() {
         // Activate the last tab. This is a fix. When a tab is closed, another tab is not activated by the webdriver.
@@ -444,8 +420,6 @@ abstract class AbstractDriverManager {
 
     /**
      * Handles the things that should be done after modification of {@link tabs}
-     *
-     * @since 1.8.1
      */
     protected function tabListModified() {
         // Reset the keys of the array so that the keys become sequential.
@@ -456,7 +430,6 @@ abstract class AbstractDriverManager {
      * If code coverage is enabled, modifies window.ajaxurl so that coverage of the code run by AJAX calls are analyzed
      * as well.
      *
-     * @since 1.8.1
      * @return $this
      */
     protected function maybeModifyAjaxUrlForCoverage() {
@@ -469,7 +442,6 @@ abstract class AbstractDriverManager {
 
     /**
      * Invalidate the instance if this is a singleton.
-     * @since 1.8.1
      */
     protected function onInvalidateInstance() {
 
@@ -481,7 +453,7 @@ abstract class AbstractDriverManager {
 
     /**
      * @return bool True if code coverage is enabled.
-     * @since 1.8.1
+     * 
      */
     abstract protected function isCoverageEnabled(): bool;
 
@@ -491,7 +463,7 @@ abstract class AbstractDriverManager {
      * '&testName=nameOfCurrentTest'
      *
      * @return string The key that will be used when defining test names
-     * @since 1.8.1
+     * 
      */
     abstract protected function getCoverageHintingKey(): string;
 
