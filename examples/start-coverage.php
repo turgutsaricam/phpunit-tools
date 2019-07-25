@@ -7,6 +7,7 @@ set_time_limit(60);
 $appPath = '/path/to/app/';
 require_once $appPath . 'vendor/autoload.php';
 
+use TurgutSaricam\PHPUnitTools\Coverage\CoverageHandler;
 new CoverageHandler(
     CoverageHandler::COVERAGE_TYPE_XDEBUG,
     'coverageStartHintKey',

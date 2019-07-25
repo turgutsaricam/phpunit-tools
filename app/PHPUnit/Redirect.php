@@ -188,7 +188,7 @@ class Redirect {
      * @return $this
      */
     private function setModifiedCommandParts() {
-        $thisPath = __FILE__;
+        $thisPath = $this->args[0];
 
         $this->cmdParts = array_map(function($v) use (&$thisPath) {
 

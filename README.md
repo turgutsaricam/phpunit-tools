@@ -1,5 +1,5 @@
 # phpunit-tools
-This repository contains tools that are commonly needed to perform unit and UI tests using PHPUnit.
+This repository contains tools that are commonly needed to perform unit and UI tests using PHPUnit with code coverage.
 
 # Coverage Package
 This package contains `CoverageHandler` and `ReportGenerator` classes. `CoverageHandler` is responsible for listening to `$_POST`, `$_GET`, and `$_POST` arrays for a hint signaling that code coverage should be enabled. When the class retrieves the hint, it starts code coverage and dumps the coverage data into the defined directory. `ReportGenerator` is responsible for generating code coverage reports from the code coverage data dumped by `CoverageHandler`. It can generate HTML and Clover reports.
@@ -55,13 +55,6 @@ This class looks for the path of the test files and redirects the command to the
 After these are correctly set, you can use PHPStorm's buttons (run, debug, run with coverage) to run the tests.
 
 An example `phpunit` file can be observed in `examples/phpunit`. Simply refer to the phpDoc to learn what the parameters are.
-
-# WebDriver Package
-This package requires [`facebook/webdriver`](https://github.com/facebook/php-webdriver). Basically, this should be used for Selenium tests. This package provides an `AbstractDriverManager` that handles loading different URLs in different tabs, switching to a tab if a URL is already loaded in a tab, adding a parameter for each URL to hint code coverage (the same hint explained in `CoverageHandler`), modifying `window.ajaxurl` JavaScript variable (which is the default variable for WordPress sites) to enable code coverage for AJAX requests, closing excessive browser tabs, setting up the driver and logging into the site-under-test, and other things like refreshing, closing, opening tabs.
-
-To use this package, create a class that extends `AbstractDriverManager`, implement the required methods (or use `DefaultDriverManager`). `AbstractDriverManager` requires an `AbstractSetupStrategy` that will setup the driver and login to the site. To provide a strategy, simply create a class and extend it to `AbstractSetupStrategy`, and implement the required methods. The package comes with `WordPressSetupStrategy`. If you are testing a WordPress site, you can directly use it.
-
-In your tests, instead of using the webdriver directly, perform every driver action through an `AbstractDriverManager`. Otherwise, there is no point using a driver manager.
 
 # TODO
 - Write tests

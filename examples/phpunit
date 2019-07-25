@@ -2,8 +2,9 @@
 <?php
 
 $appPath = '/path/to/app/';
-require_once("$appPath/vendor/autoload.php");
+require_once("$appPath/vendor/turgutsaricam/phpunit-tools/app/PHPUnit/Redirect.php");
 
+use TurgutSaricam\PHPUnitTools\PHPUnit\Redirect;
 $redirect = new Redirect(
     __DIR__ . "/../",
     'tests/tests-app',

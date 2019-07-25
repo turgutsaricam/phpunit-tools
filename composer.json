@@ -9,8 +9,9 @@
   "minimum-stability": "beta",
   "require": {
     "php": "~7.2",
-    "facebook/webdriver": "~1.6",
-    "phpunit/php-code-coverage": "~7.0"
+    "phpunit/php-code-coverage": "*"
+  },
+  "require-dev": {
   },
   "autoload": {
     "psr-4": {
