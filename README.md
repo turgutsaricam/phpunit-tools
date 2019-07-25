@@ -103,6 +103,10 @@ After these are correctly set, you can use PHPStorm's buttons (run, debug, run w
 
 An example `phpunit` file might be the following:
 ```php
+#!/usr/bin/env php
+
+// require your autoloader.php
+
 $redirect = new Redirect(
     __DIR__ . "/../",
     'tests/tests-app',
