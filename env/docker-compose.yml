@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+
+  phpunit-tools-php:
+    build:
+      context: ./../../phpunit-tools
+      dockerfile: env/php/Dockerfile
+
+    image: phpunit-tools-php:latest
+    container_name: phpunit-tools-php
+
+    volumes:
+      - ./../../phpunit-tools:/usr/src/phpunit-tools
+
+  phpunit-tools-php-cli:
+    image: phpunit-tools-php:latest
+    volumes:
+      - ./../../phpunit-tools:/usr/src/phpunit-tools
