@@ -1,0 +1,18 @@
+#!/usr/bin/env php
+<?php
+
+$appPath = '/path/to/app/';
+require_once("$appPath/vendor/autoload.php");
+
+$redirect = new Redirect(
+    __DIR__ . "/../",
+    'tests/tests-app',
+    'tests/tests-app/phpunit.xml.dist',
+    'app/vendor/phpunit/phpunit/phpunit',
+    'tests/tests-ui',
+    'tests/tests-ui/phpunit.xml.dist',
+    'tests/tests-ui/vendor/phpunit/phpunit/phpunit',
+    'UI_TEST_COVERAGE_ENABLED'
+);
+
+$redirect->redirect();

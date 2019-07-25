@@ -17,59 +17,12 @@ php_value auto_prepend_file "/path/to/start-coverage.php"
 
 After these steps are done, code coverage data will be dumped to the defined directory when the code coverage hint is detected.
 
-An example `start-coverage.php` might be the following
-```php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-set_time_limit(60);
-
-$appPath = '/path/to/app/';
-require_once $appPath . 'vendor/autoload.php';
-
-new CoverageHandler(
-    CoverageHandler::COVERAGE_TYPE_XDEBUG,
-    'coverageStartHintKey',
-    [
-        $appPath,
-    ],
-    [
-        $appPath . '/vendor',
-        $appPath . '/storage',
-        $appPath . '/views',
-    ],
-    __DIR__ . "/coverages"
-);
-```
+Examples can be observed in `examples/start-coverage.php` and `examples/.htaccess`.
 
 _Based on <https://tarunlalwani.com/post/php-code-coverage-web-selenium/> Visit this page for more information._
 
 ## ReportGenerator
-This class generates HTML and Clover reports from the coverage data dumped by `CoverageHandler`. To use this, create a file named as `generate-report.php` that creates an instance of `ReportGenerator` and calls `generate()` method.
-
-An example `generate-report.php` file might be the following:
-```php
-$appPath = '/path/to/app/';
-require_once("$appPath/vendor/autoload.php");
-
-$generator = new ReportGenerator(
-    true,
-    true,
-    [
-        $appPath,
-    ],
-    [
-        $appPath . '/vendor',
-        $appPath . '/storage',
-        $appPath . '/views',
-    ],
-    'ui-test-report',
-    __DIR__ . "/reports",
-    __DIR__ . "/coverages",
-    'Europe/Istanbul'
-);
-
-$generator->generate();
-```
+This class generates HTML and Clover reports from the coverage data dumped by `CoverageHandler`. To use this, create a file named as `generate-report.php` that creates an instance of `ReportGenerator` and calls `generate()` method. An example can be seen in `examples/generate-report.php`. 
 
 Next, to generate a report, just run the following command in the terminal
     
@@ -101,27 +54,7 @@ This class looks for the path of the test files and redirects the command to the
 
 After these are correctly set, you can use PHPStorm's buttons (run, debug, run with coverage) to run the tests.
 
-An example `phpunit` file might be the following:
-```php
-#!/usr/bin/env php
-
-// require your autoloader.php
-
-$redirect = new Redirect(
-    __DIR__ . "/../",
-    'tests/tests-app',
-    'tests/tests-app/phpunit.xml.dist',
-    'app/vendor/phpunit/phpunit/phpunit',
-    'tests/tests-ui',
-    'tests/tests-ui/phpunit.xml.dist',
-    'tests/tests-ui/vendor/phpunit/phpunit/phpunit',
-    'UI_TEST_COVERAGE_ENABLED'
-);
-
-$redirect->redirect();
-```
-
-Simply refer to the phpDoc to learn what are the parameters.
+An example `phpunit` file can be observed in `examples/phpunit`. Simply refer to the phpDoc to learn what the parameters are.
 
 # WebDriver Package
 This package requires [`facebook/webdriver`](https://github.com/facebook/php-webdriver). Basically, this should be used for Selenium tests. This package provides an `AbstractDriverManager` that handles loading different URLs in different tabs, switching to a tab if a URL is already loaded in a tab, adding a parameter for each URL to hint code coverage (the same hint explained in `CoverageHandler`), modifying `window.ajaxurl` JavaScript variable (which is the default variable for WordPress sites) to enable code coverage for AJAX requests, closing excessive browser tabs, setting up the driver and logging into the site-under-test, and other things like refreshing, closing, opening tabs.

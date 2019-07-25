@@ -1,0 +1,15 @@
+# This file will be included in all requests before everything. It will handle initializing code coverage and dumping
+# the coverage files. This exists because we want to see code coverage report for UI tests.
+php_value auto_prepend_file "/path/to/start-coverage.php"
+
+# BEGIN WordPress
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+</IfModule>
+
+# END WordPress
