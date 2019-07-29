@@ -97,7 +97,6 @@ class Redirect {
      *                                              {@link baseDir}
      * @param string $relativeUiTestsDirPath        Path of the directory that stores the user interface tests,
      *                                              relative to {@link baseDir}
-     * @since 1.8.1
      */
     public function __construct($baseDirPath,
                                 $relativeUnitTestsDirPath, $relativeDefaultConfigXmlPath, $relativeDefaultPhpunitPath,
@@ -282,7 +281,6 @@ class Redirect {
      *
      * @param string $pathRelativeToBaseDir A path that is relative to {@link baseDir}
      * @return bool|string Absolute path
-     * @since 1.8.1
      */
     private function makeAbsolutePath($pathRelativeToBaseDir) {
         return realpath($this->baseDir . $pathRelativeToBaseDir);
@@ -294,7 +292,6 @@ class Redirect {
      * @param string $haystack
      * @param string $needle
      * @return bool True if the haystack starts with the needle.
-     * @since 1.8.1
      */
     private function startsWith($haystack, $needle) {
         return substr($haystack, 0, strlen($needle)) === $needle;
