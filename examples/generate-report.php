@@ -6,8 +6,6 @@ require_once("$appPath/vendor/autoload.php");
 
 use TurgutSaricam\PHPUnitTools\Coverage\ReportGenerator;
 $generator = new ReportGenerator(
-    true,
-    true,
     [
         $appPath,
     ],
@@ -21,5 +19,10 @@ $generator = new ReportGenerator(
     __DIR__ . "/coverages",
     'Europe/Istanbul'
 );
+
+$generator
+    ->setGenerateClover(true)
+    ->setGenerateHtml(true)
+    ->setGeneratePHP(true);
 
 $generator->generate();

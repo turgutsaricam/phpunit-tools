@@ -15,6 +15,7 @@ use ReflectionException;
 use SebastianBergmann\CodeCoverage\CodeCoverage;
 use SebastianBergmann\CodeCoverage\Report\Clover;
 use SebastianBergmann\CodeCoverage\Report\Html\Facade;
+use SebastianBergmann\CodeCoverage\Report\PHP;
 
 class ReportGenerator {
 
@@ -23,6 +24,9 @@ class ReportGenerator {
 
     /** @var bool True if a Clover report should be generated. */
     private $generateClover = false;
+
+    /** @var bool True if a PHP report should be generated. */
+    private $generatePHP = false;
 
     /**
      * @var array The paths that will be whitelisted for Xdebug. Code analysis will be performed just for the files
@@ -71,21 +75,16 @@ class ReportGenerator {
     private $isPrepared = false;
 
     /**
-     * @param bool   $generateHtml           See {@link $generateHtml}
-     * @param bool   $generateClover         See {@link $generateClover}
      * @param array  $whitelistPaths         See {@link $whitelistPaths}
      * @param array  $excludedWhitelistPaths See {@link $excludedWhitelistPaths}
      * @param string $id                     See {@link $id}
      * @param string $reportsDirectoryPath   See {@link $reportsDirectoryPath}
      * @param string $coverageDumpDirPath    See {@link $coverageDumpDirPath}
      * @param string $timeZone               See {@link $timeZone}
-     * 
      */
-    public function __construct($generateHtml, $generateClover, $whitelistPaths, $excludedWhitelistPaths,
-                                $id, $reportsDirectoryPath, $coverageDumpDirPath, $timeZone = '') {
+    public function __construct($whitelistPaths, $excludedWhitelistPaths, $id, $reportsDirectoryPath,
+                                $coverageDumpDirPath, $timeZone = '') {
 
-        $this->generateHtml = $generateHtml;
-        $this->generateClover = $generateClover;
         $this->reportsDirectoryPath = rtrim($reportsDirectoryPath, DIRECTORY_SEPARATOR);
         $this->coverageDumpDirPath  = rtrim($coverageDumpDirPath, DIRECTORY_SEPARATOR);
 
@@ -97,6 +96,10 @@ class ReportGenerator {
         # Increase the memory in multiples of 128M in case of memory error
         ini_set('memory_limit', '12800M');
     }
+
+    /*
+     * PUBLIC HELPERS
+     */
 
     /**
      * Generates the specified reports from the coverage dumps.
@@ -110,7 +113,39 @@ class ReportGenerator {
         // Generate the reports
         $dateStr = $this->getCurrentDateString();
         if ($this->generateHtml)    $this->generateHtmlReport($dateStr);
-        if ($this->generateClover)  $this->generateClover($dateStr);
+        if ($this->generateClover)  $this->generateCloverReport($dateStr);
+        if ($this->generatePHP)     $this->generatePHPReport($dateStr);
+    }
+
+    /*
+     * SETTERS
+     */
+
+    /**
+     * @param bool $generateHtml See {@link $generateHtml}
+     * @return ReportGenerator
+     */
+    public function setGenerateHtml(bool $generateHtml) {
+        $this->generateHtml = $generateHtml;
+        return $this;
+    }
+
+    /**
+     * @param bool $generateClover See {@link $generateClover}
+     * @return ReportGenerator
+     */
+    public function setGenerateClover(bool $generateClover) {
+        $this->generateClover = $generateClover;
+        return $this;
+    }
+
+    /**
+     * @param bool $generatePHP See {@link $generatePHP}
+     * @return ReportGenerator
+     */
+    public function setGeneratePHP(bool $generatePHP) {
+        $this->generatePHP = $generatePHP;
+        return $this;
     }
 
     /*
@@ -118,11 +153,25 @@ class ReportGenerator {
      */
 
     /**
+     * Generates PHP report from {@link $finalCoverage}
+     *
+     * @param string $dateStr The date that will be appended to the name of the report
+     */
+    private function generatePHPReport($dateStr) {
+        $this->inform("Generating final report in PHP ({$dateStr})...");
+
+        $writer = new PHP();
+        $writer->process($this->finalCoverage, $this->reportsDirectoryPath . "/php-{$dateStr}.php");
+
+        $this->inform("PHP report generated successfully.");
+    }
+
+    /**
      * Generates Clover report from {@link $finalCoverage}
      *
      * @param string $dateStr The date that will be appended to the name of the report
      */
-    private function generateClover($dateStr) {
+    private function generateCloverReport($dateStr) {
         $this->inform("Generating final report in Clover ({$dateStr})...");
 
         $writer = new Clover();
