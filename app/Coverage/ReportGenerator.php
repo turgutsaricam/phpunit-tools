@@ -56,10 +56,10 @@ class ReportGenerator {
     private $reportsDirectoryPath;
 
     /**
-     * @var string Absolute path of the directory into which the coverage dumps will be saved. The path does not end
-     *             with the directory separator.
+     * @var string|string[] Absolute path of the directory into which the coverage dumps will be saved. The path does
+     *      not end with the directory separator. This can also be an array of paths in which coverage dump files exist.
      */
-    private $coverageDumpDirPath;
+    private $coverageDumpDirPaths;
 
     /*
      *
@@ -75,18 +75,18 @@ class ReportGenerator {
     private $isPrepared = false;
 
     /**
-     * @param array  $whitelistPaths         See {@link $whitelistPaths}
-     * @param array  $excludedWhitelistPaths See {@link $excludedWhitelistPaths}
-     * @param string $id                     See {@link $id}
-     * @param string $reportsDirectoryPath   See {@link $reportsDirectoryPath}
-     * @param string $coverageDumpDirPath    See {@link $coverageDumpDirPath}
-     * @param string $timeZone               See {@link $timeZone}
+     * @param array           $whitelistPaths         See {@link $whitelistPaths}
+     * @param array           $excludedWhitelistPaths See {@link $excludedWhitelistPaths}
+     * @param string          $id                     See {@link $id}
+     * @param string          $reportsDirectoryPath   See {@link $reportsDirectoryPath}
+     * @param string|string[] $coverageDumpDirPath    See {@link $coverageDumpDirPath}
+     * @param string          $timeZone               See {@link $timeZone}
      */
     public function __construct($whitelistPaths, $excludedWhitelistPaths, $id, $reportsDirectoryPath,
                                 $coverageDumpDirPath, $timeZone = '') {
 
         $this->reportsDirectoryPath = rtrim($reportsDirectoryPath, DIRECTORY_SEPARATOR);
-        $this->coverageDumpDirPath  = rtrim($coverageDumpDirPath, DIRECTORY_SEPARATOR);
+        $this->coverageDumpDirPaths = is_array($coverageDumpDirPath) ? $coverageDumpDirPath : [$coverageDumpDirPath];
 
         $this->id = $id;
         $this->timeZone = $timeZone;
@@ -282,7 +282,7 @@ class ReportGenerator {
 
         $paths = [];
         foreach($allExtensions as $ext) {
-            $paths = array_merge($paths, $this->getCoverFilePathsWithExt($ext));
+            $paths = array_merge($paths, $this->getCoverageFilePathsWithExt($ext));
         }
 
         return $paths;
@@ -292,8 +292,17 @@ class ReportGenerator {
      * @param string $ext Extension of the needed coverage files.
      * @return array Absolute paths of the coverage dump files having the specified extension
      */
-    private function getCoverFilePathsWithExt($ext) {
-        return glob($this->coverageDumpDirPath . "/*.{$ext}") ?: [];
+    private function getCoverageFilePathsWithExt($ext) {
+        // Create a glob pattern for each path.
+        $patterns = array_map(function($path) use (&$ext) {
+            $path = rtrim($path, DIRECTORY_SEPARATOR);
+            return sprintf('%1$s/*.%2$s', $path, $ext);
+        }, $this->coverageDumpDirPaths);
+
+        // Create the final pattern that can be used to match files in all the directories in glob function.
+        $finalPattern = sprintf('{%1$s}', implode(',', $patterns));
+
+        return glob($finalPattern, GLOB_BRACE) ?: [];
     }
 
     /**
