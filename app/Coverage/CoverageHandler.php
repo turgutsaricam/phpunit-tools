@@ -78,15 +78,19 @@ class CoverageHandler {
     /** @var CodeCoverage */
     private $codeCoverage;
 
+    /** @var bool True if debug mode is on. When this is true, debug messages will be written to error log. */
+    private $debug;
+
     /**
      * @param string $coverageType           See {@link $coverageType}
      * @param string $testNameKey            See {@link $testNameKey}
      * @param array  $whitelistPaths         See {@link $whitelistPaths}
      * @param array  $excludedWhitelistPaths See {@link $excludedWhitelistPaths}
      * @param string $coverageDumpDirPath    See {@link $coverageDumpDirPath}
-     * 
+     * @param bool   $debug                  See {@link $debug}
      */
-    public function __construct($coverageType, $testNameKey, $whitelistPaths, $excludedWhitelistPaths, $coverageDumpDirPath) {
+    public function __construct($coverageType, $testNameKey, $whitelistPaths, $excludedWhitelistPaths,
+                                $coverageDumpDirPath, $debug = false) {
         $this->coverageType         = $coverageType;
         $this->testNameKey          = $testNameKey;
         $this->coverageDumpDirPath  = rtrim($coverageDumpDirPath, DIRECTORY_SEPARATOR);
@@ -94,6 +98,8 @@ class CoverageHandler {
         // Set whitelisted and excluded paths.
         $this->whitelistPaths           = $whitelistPaths;
         $this->excludedWhitelistPaths   = $excludedWhitelistPaths;
+
+        $this->debug = $debug;
 
         /*
          *
@@ -113,12 +119,13 @@ class CoverageHandler {
      * 
      */
     public function __destruct() {
+        $this->debugMessage("__destruct() is called.");
         try {
             // End the coverage.
             $this->maybeEndCoverage();
 
         } catch (\Exception $ex) {
-            echo (string) $ex;
+            $this->debugMessage((string) $ex);
         }
     }
 
@@ -130,9 +137,15 @@ class CoverageHandler {
      * Starts collecting coverage data if {@link $coverageEnabled} is true.
      */
     private function maybeStartCoverage() {
+        $this->debugMessage("maybeStartCoverage() is called.");
+
         if (!$this->coverageEnabled) return;
 
+        $this->debugMessage("Coverage is enabled. Proceeding with starting the coverage...");
+
         if ($this->coverageType === static::COVERAGE_TYPE_XDEBUG) {
+            $this->debugMessage("Starting Xdebug code coverage...");
+
             // Set whitelist filter for Xdebug if a whitelist is provided. Note that providing both a whitelist and a
             // blacklist is not possible in Xdebug. See: https://xdebug.org/docs/code_coverage
             if ($this->whitelistPaths) {
@@ -142,6 +155,7 @@ class CoverageHandler {
             xdebug_start_code_coverage(XDEBUG_CC_UNUSED | XDEBUG_CC_DEAD_CODE);
 
         } else if ($this->coverageType === static::COVERAGE_TYPE_CODE_COVERAGE) {
+            $this->debugMessage("Starting PHP code coverage...");
 
             $this->codeCoverage = new CodeCoverage();
             foreach ($this->whitelistPaths as $directoryPath) {
@@ -161,32 +175,40 @@ class CoverageHandler {
      * Collects coverage data and dumps it if {@link $coverageEnabled} is true.
      */
     private function maybeEndCoverage() {
+        $this->debugMessage("maybeEndCoverage() is called.");
         if (!$this->coverageEnabled) return;
+
+        $this->debugMessage("Coverage was enabled. Proceeding with dumping the coverage into a file...");
 
         try {
             if ($this->coverageType === static::COVERAGE_TYPE_XDEBUG) {
+                $this->debugMessage("Getting Xdebug coverage data...");
+
                 xdebug_stop_code_coverage(false);
                 $coverageData = xdebug_get_code_coverage();
 
                 // If there is no coverage data, no need to dump anything.
                 if (!$coverageData) return;
 
+                $this->debugMessage("There is coverage data. Dumping it...");
+
                 $this->dumpCoverage('json', json_encode($coverageData));
 
             } else if ($this->coverageType === static::COVERAGE_TYPE_CODE_COVERAGE) {
+                $this->debugMessage("Getting PHP coverage data...");
 
                 $this->codeCoverage->stop();
                 $writer = new PHP();
 
                 $coverageFilePath = $this->getCoverageFilePath('php');
-                echo "Dumping to {$coverageFilePath}...";
+                $this->debugMessage("Dumping to {$coverageFilePath}...");
 
                 $writer->process($this->codeCoverage, $coverageFilePath);
-
-                echo "Dumped.";
+                $this->debugMessage("Dumped.");
             }
 
         } catch (\Exception $ex) {
+            $this->debugMessage("There was an error. Dumping the error into a file...");
             $this->dumpCoverage('ex', $ex);
         }
     }
@@ -240,5 +262,14 @@ class CoverageHandler {
     private function getTestName(array $data) {
         $key = $this->testNameKey;
         return isset($data[$key]) && $data[$key] ? (string)$data[$key] : null;
+    }
+
+    /**
+     * Writes the given message via {@link error_log()}
+     * @param string $message
+     */
+    private function debugMessage(string $message) {
+        if (!$this->debug) return;
+        error_log(sprintf('CoverageHandler: "%1$s" - %2$s', $this->testName, $message));
     }
 }
