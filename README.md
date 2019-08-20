@@ -24,7 +24,7 @@ _Based on <https://tarunlalwani.com/post/php-code-coverage-web-selenium/> Visit 
 ## CoverageStarterIncluder
 This class finds the PHP files that should be included in `.htaccess` by setting `auto_prepend_file`. A single value can be provided as the value of `auto_prepend_file`. In case that a project contains multiple sub-projects whose `start-coverage.php` should be included in the main `.htaccess` file, a PHP file that has `include` statements in it should be created to prepend multiple PHP files. This class handles this case.
 
-The class searches for PHP files that should be included and includes them by keeping a reference to them. By this way, `__destruct` methods of the `CoverHandler` instances created in `start-coverage.php` files are not called prematurely. They will be called when the script exits. Therefore, coverage data can be collected and dumped properly.
+The class searches for PHP files that should be included and includes them by keeping a reference to them. By this way, `__destruct` methods of the `CoverageHandler` instances created in `start-coverage.php` files are not called prematurely. They will be called when the script exits. Therefore, coverage data can be collected and dumped properly.
 
 It is enough to create a PHP file and create an instance of `CoverageStarterIncluder` in it to include all `start-coverage.php` files in the project. See `examples/coverage-starter-includer.php` and `examples/.htaccess` for an example.
 
