@@ -1,6 +1,6 @@
 # This file will be included in all requests before everything. It will handle initializing code coverage and dumping
 # the coverage files. This exists because we want to see code coverage report for UI tests.
-php_value auto_prepend_file "/path/to/start-coverage.php"
+php_value auto_prepend_file "/path/to/coverage-starter-includer.php"
 
 # BEGIN WordPress
 <IfModule mod_rewrite.c>
