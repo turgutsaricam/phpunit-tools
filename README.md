@@ -26,7 +26,7 @@ This class finds the PHP files that should be included in `.htaccess` by setting
 
 The class searches for PHP files that should be included and includes them by keeping a reference to them. By this way, `__destruct` methods of the `CoverageHandler` instances created in `start-coverage.php` files are not called prematurely. They will be called when the script exits. Therefore, coverage data can be collected and dumped properly.
 
-It is enough to create a PHP file and create an instance of `CoverageStarterIncluder` in it to include all `start-coverage.php` files in the project. See `examples/coverage-starter-includer.php` and `examples/.htaccess` for an example.
+It is enough to create a PHP file, create an instance of `CoverageStarterIncluder` in it, and call `includeFiles()` to include all `start-coverage.php` files in the project. See `examples/coverage-starter-includer.php` and `examples/.htaccess` for an example.
 
 ## ReportGenerator
 This class generates HTML and Clover reports from the coverage data dumped by `CoverageHandler`. To use this, create a file named as `generate-report.php` that creates an instance of `ReportGenerator` and calls `generate()` method. An example can be seen in `examples/generate-report.php`. 
@@ -64,4 +64,4 @@ After these are correctly set, you can use PHPStorm's buttons (run, debug, run w
 An example `phpunit` file can be observed in `examples/phpunit`. Simply refer to the phpDoc to learn what the parameters are.
 
 # TODO
-- Write tests
+- Write tests to cover all of the functionality provided by the classes

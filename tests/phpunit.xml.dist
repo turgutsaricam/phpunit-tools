@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<phpunit
+        bootstrap="bootstrap.php"
+        backupGlobals="false"
+        colors="true"
+        convertErrorsToExceptions="true"
+        convertNoticesToExceptions="true"
+        convertWarningsToExceptions="true"
+>
+    <testsuites>
+
+        <testsuite name="PHPUnitTools">
+            <directory suffix="Test.php">./</directory>
+        </testsuite>
+
+    </testsuites>
+
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true" addUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">../../app</directory>
+        </whitelist>
+    </filter>
+
+</phpunit>

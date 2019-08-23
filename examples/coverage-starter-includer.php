@@ -9,3 +9,5 @@ $includer = new CoverageStarterIncluder(
     ['vendor', 'css', 'js', 'public', 'node_modules'],
     'start-coverage.php'
 );
+
+$includer->includeFiles();
