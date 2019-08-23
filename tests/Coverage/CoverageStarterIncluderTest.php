@@ -93,6 +93,23 @@ class CoverageStarterIncluderTest extends TestCase {
         $this->assertSame($filePaths2, $filePaths3);
     }
 
+    public function testThatClearCacheMethodClearsTheCache() {
+        $includer1 = new CoverageStarterIncluder($this->getSearchRootDirPath());
+        $includer1->setCacheFilePath($this->getCacheFilePath())->includeFiles();
+        $fromCache1 = $includer1->isFromCache();
+
+        $includer2 = new CoverageStarterIncluder($this->getSearchRootDirPath());
+        $isCleared = $includer2
+            ->setCacheFilePath($this->getCacheFilePath())
+            ->clearCache();
+        $includer2->includeFiles();
+        $fromCache2 = $includer2->isFromCache();
+
+        $this->assertFalse($fromCache1);
+        $this->assertTrue($isCleared);
+        $this->assertFalse($fromCache2);
+    }
+
     /*
      * PRIVATE STATIC HELPERS
      */

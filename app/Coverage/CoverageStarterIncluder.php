@@ -87,6 +87,20 @@ class CoverageStarterIncluder {
         }
     }
 
+    /**
+     * Deletes the cache file so that the files to be included are searched in the given root directory.
+     *
+     * @return bool True if the cache is cleared. Otherwise, false.
+     */
+    public function clearCache() {
+        $cacheFile = $this->getCacheFilePath();
+        if (file_exists($cacheFile)) {
+            @unlink($cacheFile);
+        }
+
+        return !file_exists($cacheFile);
+    }
+
     /*
      * PRIVATE METHODS
      */
