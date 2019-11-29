@@ -200,6 +200,14 @@ class Redirect {
                 $v = $this->finalConfigPath;
             }
 
+            if ($this->isUiTest) {
+                // Remove the command starting with --cache-result-file for UI tests since PHPUnit version of UI tests
+                // does not support this command, resulting in an error.
+                if (strpos($v, '--cache-result-file') === 0) {
+                    $v = null;
+                }
+            }
+
             return $v;
 
         }, $this->args);
