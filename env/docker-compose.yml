@@ -5,15 +5,29 @@ services:
   phpunit-tools-php:
     build:
       context: ./../../phpunit-tools
-      dockerfile: env/php/Dockerfile
+      dockerfile: env/services/php/Dockerfile
 
     image: phpunit-tools-php:latest
     container_name: phpunit-tools-php
 
+    environment:
+      VIRTUAL_HOST: phpunit-tools.test
+
     volumes:
       - ./../../phpunit-tools:/usr/src/phpunit-tools
+      - ./../../phpunit-tools/tests/site:/var/www/html
+
+    ports:
+    - 4650:80
+
+    networks:
+      - nginx
 
   phpunit-tools-php-cli:
     image: phpunit-tools-php:latest
     volumes:
       - ./../../phpunit-tools:/usr/src/phpunit-tools
+
+networks:
+  nginx:
+    external: true

@@ -1,0 +1,4 @@
+!.gitignore
+coverages/
+include-files.txt
+errors.log

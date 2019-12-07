@@ -1,4 +1,4 @@
-FROM php:7.2
+FROM php:7.2-apache-stretch
 
 RUN apt-get update && apt-get install -y \
     sudo \
@@ -12,13 +12,13 @@ RUN apt-get install -y \
   && docker-php-ext-configure zip --with-libzip \
   && docker-php-ext-install zip
 
-COPY ./env/php/setup-environment.sh /bin/
+COPY ./env/services/php/20-xdebug.ini /root
+
+COPY ./env/services/php/setup-environment.sh /bin/
 RUN chmod +x /bin/setup-environment.sh
 RUN cd /bin && ./setup-environment.sh
-
-COPY ./env/php/20-xdebug.ini /usr/local/etc/php/conf.d/20-xdebug.ini
 
 VOLUME /usr/src/phpunit-tools
 WORKDIR /usr/src/phpunit-tools
 
-CMD [ "tail", "-f", "/dev/null" ]
+CMD ["apache2-foreground"]
