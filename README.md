@@ -63,5 +63,23 @@ After these are correctly set, you can use PHPStorm's buttons (run, debug, run w
 
 An example `phpunit` file can be observed in `examples/phpunit`. Simply refer to the phpDoc to learn what the parameters are.
 
-# TODO
+# Development
+
+## Testing UI coverage dumps and report generation
+First of all, make sure `127.0.0.1 phpunit-tools.test` line exists in `/etc/hosts` file. Also, a [`jwilder/nginx-proxy`](https://github.com/jwilder/nginx-proxy) should be up and running. Then, initialize the development environment by running
+
+    cd env && docker-compose up -d
+
+Next, you can visit `phpunit-tools.test` in your browser. To produce coverage dumps, you can use `?coverageStartHintKey=<test-name>` query, .e.g. `phpunit-tools.test?coverageStartHintKey=my-test`. After visiting this URL, the coverage dump file is created under `tests/site/coverages` directory. To produce a report, get into the container and run `site/files/generate-report.php`, e.g.
+
+    docker exec -it phpunit-tools-php bash
+    cd /var/www/html/files
+    php generate-report.php
+    
+After this is done, the reports can be found under `/var/www/html/files/reports` directory or `/path/to/phpunit-tools/tests/site/files/reports` directory. These are the same directories, since the local directory is attached as volume to the container.
+
+## Unit tests
+Unit tests are under `tests/Coverages` directory. The unit tests are incomplete.
+
+## TODO
 - Write tests to cover all of the functionality provided by the classes
