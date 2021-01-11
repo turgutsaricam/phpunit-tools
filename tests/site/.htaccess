@@ -1,0 +1,5 @@
+# This file will be included in all requests before everything. It will handle initializing code coverage and dumping
+# the coverage files.
+php_value auto_prepend_file "/var/www/html/files/coverage-starter-includer.php"
+
+php_value error_log /var/www/html/errors.log
