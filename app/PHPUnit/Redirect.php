@@ -144,8 +144,18 @@ class Redirect {
     private function runNewCommand() {
         $_SERVER['argv'] = array_values($this->cmdParts);
 
-        /** @noinspection PhpIncludeInspection */
-        require_once $this->finalPhpunitPath;
+        // The original phpunit file's first two lines are:
+        //      #!/usr/bin/env php
+        //      <?php declare(strict_types=1);
+        // Because the "declare" call is in the second line, we cannot directly include this file. It must be in the
+        // first line. Here, we remove the first line from the phpunit file so that the "declare" call is in the first
+        // line. Then, we save this modified file under another name and include it. This is just a workaround.
+        $phpUnitFileContents = file_get_contents($this->finalPhpunitPath);
+        $phpUnitFileContents = str_replace("#!/usr/bin/env php\n", '', $phpUnitFileContents);
+        $preparedPhpUnitPath = $this->finalPhpunitPath . '.prepared';
+        file_put_contents($preparedPhpUnitPath, $phpUnitFileContents);
+
+        require_once $preparedPhpUnitPath;
 
         return $this;
     }
